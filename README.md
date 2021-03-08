@@ -1,6 +1,9 @@
-# Paper Slider
+# EnhancedFormLayout
 
-Vaadin 14 Java integration of @polymer/paper-slider
+FormItem in the standard Vaadin FormLayout loses the required indicator of the field component. This
+component is and extended version of FormLayout with version of FormItem, EnhancedFormItem that
+solves this problem by inhirting the required indicator of the wrapped component to the EnhancedFormItem
+itself.
 
 ## Development instructions
 
