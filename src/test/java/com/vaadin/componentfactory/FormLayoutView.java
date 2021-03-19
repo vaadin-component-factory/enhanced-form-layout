@@ -2,6 +2,7 @@ package com.vaadin.componentfactory;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -167,6 +168,8 @@ public class FormLayoutView extends VerticalLayout {
         // end-source-example
         // @formatter:on
 
+        dumpResponsiveSteps(nameLayout);
+
         add(new H2("A form layout with custom responsive layouting"),
                 nameLayout);
     }
@@ -185,6 +188,8 @@ public class FormLayoutView extends VerticalLayout {
         layoutWithFormItems.addFormItem(lastName, "Last name");
         // end-source-example
 
+        dumpResponsiveSteps(layoutWithFormItems);
+        
         add(new H2("A form layout with fields wrapped in items"),
                 layoutWithFormItems);
     }
@@ -222,6 +227,8 @@ public class FormLayoutView extends VerticalLayout {
         website.setId("colspan-website");
         description.setId("colspan-description");
 
+        dumpResponsiveSteps(columnLayout);
+        
         add(new H2("Handling columns and colspans in a layout"), columnLayout);
     }
 
@@ -332,6 +339,8 @@ public class FormLayoutView extends VerticalLayout {
         save.setId("binder-save");
         reset.setId("binder-reset");
 
+        dumpResponsiveSteps(layoutWithBinder);
+
         add(new H2("A form layout with fields using Binder"), layoutWithBinder,
                 actions, infoLabel);
 
@@ -355,4 +364,11 @@ public class FormLayoutView extends VerticalLayout {
         add(new H2("Using form layout inside a composite"), layout);
     }
 
+    private static void dumpResponsiveSteps(EnhancedFormLayout formLayout){
+        List<EnhancedFormLayout.ResponsiveStep> steps = formLayout.getResponsiveSteps();
+        for (EnhancedFormLayout.ResponsiveStep step : steps){
+            System.err.println(step.toString() + " : " + step.getClass().getCanonicalName());
+        }
+        System.err.println(steps.size() + " responsive steps defined.");
+    }
 }
