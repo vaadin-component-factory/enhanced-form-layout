@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -79,6 +80,7 @@ public class EnhancedFormLayout extends FormLayout {
     public class EnhancedFormItem extends FormItem {
 
         Registration listenerReg;
+        HasText label = null;
 
         /**
          * Constructs a new EnhancedFormItem which inherits required status
@@ -90,6 +92,9 @@ public class EnhancedFormLayout extends FormLayout {
          *            The label
          */
         public EnhancedFormItem(Component comp, Component label) {
+            if (label instanceof HasText) {
+                this.label = (HasText) label;                
+            }
             add(comp);
             getElement().getStyle().set("--required-dot-opacity", "0");
             addToLabel(label);
@@ -112,6 +117,29 @@ public class EnhancedFormLayout extends FormLayout {
                                     .set("--required-dot-opacity", "0");
                         }
                     });
+        }
+
+        /**
+         * Sets the label text if label component is instance of HasText.
+         * 
+         * @param text Label text as String
+         */
+        public void setLabel(String text) {
+            if (label != null) {
+                label.setText(text);
+            }
+        }
+        
+        /**
+         * Sets the new label component
+         * 
+         * @param label Component
+         */
+        public void setLabel(Component label) {
+            if (label instanceof HasText) {
+                this.label = (HasText) label;                
+            }            
+            addToLabel(label);
         }
     }
 }
