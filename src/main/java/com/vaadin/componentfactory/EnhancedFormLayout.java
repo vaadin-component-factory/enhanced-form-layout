@@ -3,6 +3,8 @@ package com.vaadin.componentfactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
@@ -13,6 +15,7 @@ import com.vaadin.flow.component.formlayout.FormLayout.FormItem;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.shared.Registration;
 
 import elemental.json.JsonArray;
@@ -138,8 +141,16 @@ public class EnhancedFormLayout extends FormLayout {
         public void setLabel(Component label) {
             if (label instanceof HasText) {
                 this.label = (HasText) label;                
-            }            
+            }
+            clearLabel();
             addToLabel(label);
+        }
+
+        private void clearLabel() {
+            getElement().getChildren()
+                .filter(child -> "label".equals(child.getAttribute("slot")))
+                .collect(Collectors.toList())
+                .forEach(getElement()::removeChild);
         }
     }
 }

@@ -261,8 +261,8 @@ public class FormLayoutView extends VerticalLayout {
         layoutWithBinder.addFormItem(lastName, "Last name");
         layoutWithBinder.addFormItem(birthDate, "Birthdate");
         layoutWithBinder.addFormItem(email, "E-mail");
-        EnhancedFormItem phoneItem = layoutWithBinder.addFormItem(phone,
-                "Phone");
+        EnhancedFormItem phoneItem = layoutWithBinder.addFormItem(phone, "Fone");
+        phoneItem.setLabel(new Label("Phone"));
         phoneItem.add(doNotCall);
 
         // Button bar
