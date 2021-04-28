@@ -28,6 +28,8 @@ public class EnhancedFormLayout extends FormLayout {
     private static final String MIN_WIDTH_JSON_KEY = "minWidth";
     private static final String COLUMNS_JSON_KEY = "columns";
     private static final String LABELS_POSITION_JSON_KEY = "labelsPosition";
+    private String formItemLabelWidth;
+    private String formItemRowSpacing;
     
     @Override
     public EnhancedFormItem addFormItem(Component field, String label) {
@@ -79,7 +81,37 @@ public class EnhancedFormLayout extends FormLayout {
         }
         return new ResponsiveStep(minWidth, columns, labelsPosition);
     }
-    
+
+    /**
+     * This is a convenience API to set the width value subsequently
+     * used by form items created after setting.  
+     * 
+     * @param width A CSS accepted width as string
+     */
+    public void setFormItemLabelWidth(String width) {
+        formItemLabelWidth = width;
+    }
+
+    /**
+     * This is a convenience API to set the row spacing value subsequently
+     * used by form items created after setting.  
+     * 
+     * @param spacing A CSS accepted value as string
+     */
+    public void setFormItemRowSpacing(String spacing) {
+        formItemRowSpacing = spacing;
+    }
+
+    /**
+     * This is a convenience API to set the column spacing value used by
+     * this form layout.  
+     * 
+     * @param spacing A CSS accepted value as string
+     */
+    public void setColSpacing(String spacing) {
+        getStyle().set("--vaadin-form-layout-column-spacing", spacing);
+    }    
+
     public class EnhancedFormItem extends FormItem {
 
         Registration listenerReg;
@@ -120,6 +152,8 @@ public class EnhancedFormLayout extends FormLayout {
                                     .set("--required-dot-opacity", "0");
                         }
                     });
+            if (formItemLabelWidth != null) setLabelWidth(formItemLabelWidth);
+            if (formItemRowSpacing != null) setRowSpacing(formItemRowSpacing);
         }
 
         /**
@@ -152,5 +186,26 @@ public class EnhancedFormLayout extends FormLayout {
                 .collect(Collectors.toList())
                 .forEach(getElement()::removeChild);
         }
+
+        /**
+         * This is a convenience API to set the width value of this
+         * form item.
+         * 
+         * @param width A CSS accepted width as string
+         */
+        public void setLabelWidth(String width) {
+            getStyle().set("--vaadin-form-item-label-width", width);
+        }
+        
+        /**
+         * This is a convenience API to set the row spacing
+         * value of this form item.
+         * 
+         * @param spacing A CSS accepted value as string
+         */
+        public void setRowSpacing(String spacing) {
+            getStyle().set("--vaadin-form-item-row-spacing", spacing);
+        }
+        
     }
 }

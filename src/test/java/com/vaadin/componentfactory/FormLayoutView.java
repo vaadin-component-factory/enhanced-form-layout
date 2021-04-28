@@ -198,6 +198,7 @@ public class FormLayoutView extends VerticalLayout {
         // begin-source-example
         // source-example-heading: Handling columns and colspans in a layout
         EnhancedFormLayout columnLayout = new EnhancedFormLayout();
+        columnLayout.setColSpacing("5em");
         // Setting the desired responsive steps for the columns in the layout
         columnLayout.setResponsiveSteps(new ResponsiveStep("25em", 1),
                 new ResponsiveStep("32em", 2), new ResponsiveStep("40em", 3));
@@ -257,6 +258,8 @@ public class FormLayoutView extends VerticalLayout {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Button reset = new Button("Reset");
 
+        layoutWithBinder.setFormItemLabelWidth("10em");
+        layoutWithBinder.setFormItemRowSpacing("10px");
         layoutWithBinder.addFormItem(firstName, "First name");
         layoutWithBinder.addFormItem(lastName, "Last name");
         layoutWithBinder.addFormItem(birthDate, "Birthdate");
