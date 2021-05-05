@@ -260,6 +260,7 @@ public class FormLayoutView extends VerticalLayout {
 
         layoutWithBinder.setFormItemLabelWidth("10em");
         layoutWithBinder.setFormItemRowSpacing("10px");
+        layoutWithBinder.setLabelsRightAligned(true);
         layoutWithBinder.addFormItem(firstName, "First name");
         layoutWithBinder.addFormItem(lastName, "Last name");
         layoutWithBinder.addFormItem(birthDate, "Birthdate");

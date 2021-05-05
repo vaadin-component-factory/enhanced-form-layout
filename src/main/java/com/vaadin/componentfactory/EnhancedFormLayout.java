@@ -30,6 +30,7 @@ public class EnhancedFormLayout extends FormLayout {
     private static final String LABELS_POSITION_JSON_KEY = "labelsPosition";
     private String formItemLabelWidth;
     private String formItemRowSpacing;
+    private boolean labelsRightAligned;
     
     @Override
     public EnhancedFormItem addFormItem(Component field, String label) {
@@ -112,6 +113,16 @@ public class EnhancedFormLayout extends FormLayout {
         getStyle().set("--vaadin-form-layout-column-spacing", spacing);
     }    
 
+    /**
+     * This is a convenience API to set the subsequently created
+     * form items to have label texts right aligned.  
+     * 
+     * @param rightAligned A boolean value
+     */
+    public void setLabelsRightAligned(boolean rightAligned) {
+        labelsRightAligned = rightAligned;
+    }
+
     public class EnhancedFormItem extends FormItem {
 
         Registration listenerReg;
@@ -154,6 +165,7 @@ public class EnhancedFormLayout extends FormLayout {
                     });
             if (formItemLabelWidth != null) setLabelWidth(formItemLabelWidth);
             if (formItemRowSpacing != null) setRowSpacing(formItemRowSpacing);
+            if (labelsRightAligned) setRightAligned(true);
         }
 
         /**
@@ -206,6 +218,19 @@ public class EnhancedFormLayout extends FormLayout {
         public void setRowSpacing(String spacing) {
             getStyle().set("--vaadin-form-item-row-spacing", spacing);
         }
-        
+
+        /**
+         * This is a convenience API to set the 
+         * form item to have label texts right aligned.  
+         * 
+         * @param rightAligned A boolean value
+         */
+        public void setRightAligned(boolean rightAligned) {
+            if (rightAligned) {
+                getElement().getThemeList().add("right-aligned");
+            } else {
+                getElement().getThemeList().remove("right-aligned");
+            }
+        }
     }
 }

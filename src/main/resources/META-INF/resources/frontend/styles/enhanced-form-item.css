@@ -11,3 +11,7 @@
     width: 1em;
     text-align: center;
 }
+
+:host([theme~="right-aligned"]) [part="label"] {
+	text-align: right;
+}
