@@ -204,9 +204,11 @@ public class EnhancedFormLayout extends FormLayout {
          * form item.
          * 
          * @param width A CSS accepted width as string
+         * @return EnhancedFormItem for chaining 
          */
-        public void setLabelWidth(String width) {
+        public EnhancedFormItem setLabelWidth(String width) {
             getStyle().set("--vaadin-form-item-label-width", width);
+            return this;
         }
         
         /**
@@ -214,9 +216,11 @@ public class EnhancedFormLayout extends FormLayout {
          * value of this form item.
          * 
          * @param spacing A CSS accepted value as string
+         * @return EnhancedFormItem for chaining 
          */
-        public void setRowSpacing(String spacing) {
+        public EnhancedFormItem setRowSpacing(String spacing) {
             getStyle().set("--vaadin-form-item-row-spacing", spacing);
+            return this;
         }
 
         /**
@@ -224,13 +228,31 @@ public class EnhancedFormLayout extends FormLayout {
          * form item to have label texts right aligned.  
          * 
          * @param rightAligned A boolean value
+         * @return EnhancedFormItem for chaining 
          */
-        public void setRightAligned(boolean rightAligned) {
+        public EnhancedFormItem setRightAligned(boolean rightAligned) {
             if (rightAligned) {
                 getElement().getThemeList().add("right-aligned");
             } else {
                 getElement().getThemeList().remove("right-aligned");
             }
+            return this;
+        }
+
+        /**
+         * This is a convenience API to set the 
+         * form item to be aligned at bottom (true) instead of top.  
+         * 
+         * @param bottomAligned A boolean value
+         * @return EnhancedFormItem for chaining 
+         */
+        public EnhancedFormItem setBottomAligned(boolean bottomAligned) {
+            if (bottomAligned) {
+                getElement().getStyle().set("align-self","flex-end");
+            } else {
+                getElement().getStyle().set("align-self","flex-start");
+            }            
+            return this;
         }
     }
 }

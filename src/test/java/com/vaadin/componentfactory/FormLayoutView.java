@@ -186,6 +186,7 @@ public class FormLayoutView extends VerticalLayout {
         TextField lastName = new TextField();
         lastName.setPlaceholder("Doe");
         layoutWithFormItems.addFormItem(lastName, "Last name");
+        
         // end-source-example
 
         dumpResponsiveSteps(layoutWithFormItems);
