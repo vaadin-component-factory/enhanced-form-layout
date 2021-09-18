@@ -30,8 +30,9 @@ public class EnhancedFormLayout extends FormLayout {
     private static final String LABELS_POSITION_JSON_KEY = "labelsPosition";
     private String formItemLabelWidth;
     private String formItemRowSpacing;
+    private boolean stickyIndicator = false;
     private boolean labelsRightAligned;
-    
+
     @Override
     public EnhancedFormItem addFormItem(Component field, String label) {
         return addFormItem(field, new Label(label));
@@ -68,12 +69,13 @@ public class EnhancedFormLayout extends FormLayout {
         }
         return steps;
     }
-    
+
     private ResponsiveStep responsiveStepFromJson(JsonObject stepJson) {
         String minWidth = stepJson.getString(MIN_WIDTH_JSON_KEY);
         int columns = (int) stepJson.getNumber(COLUMNS_JSON_KEY);
-        String labelsPositionString = stepJson.hasKey(LABELS_POSITION_JSON_KEY) ? stepJson
-                .getString(LABELS_POSITION_JSON_KEY) : "aside";
+        String labelsPositionString = stepJson.hasKey(LABELS_POSITION_JSON_KEY)
+                ? stepJson.getString(LABELS_POSITION_JSON_KEY)
+                : "aside";
         LabelsPosition labelsPosition = null;
         if ("aside".equals(labelsPositionString)) {
             labelsPosition = LabelsPosition.ASIDE;
@@ -84,45 +86,60 @@ public class EnhancedFormLayout extends FormLayout {
     }
 
     /**
-     * This is a convenience API to set the width value subsequently
-     * used by form items created after setting.  
+     * This is a convenience API to set the width value subsequently used by
+     * form items created after setting.
      * 
-     * @param width A CSS accepted width as string
+     * @param width
+     *            A CSS accepted width as string
      */
     public void setFormItemLabelWidth(String width) {
         formItemLabelWidth = width;
     }
 
     /**
-     * This is a convenience API to set the row spacing value subsequently
-     * used by form items created after setting.  
+     * This is a convenience API to set the row spacing value subsequently used
+     * by form items created after setting.
      * 
-     * @param spacing A CSS accepted value as string
+     * @param spacing
+     *            A CSS accepted value as string
      */
     public void setFormItemRowSpacing(String spacing) {
         formItemRowSpacing = spacing;
     }
 
     /**
-     * This is a convenience API to set the column spacing value used by
-     * this form layout.  
+     * This is a convenience API to set the column spacing value used by this
+     * form layout.
      * 
-     * @param spacing A CSS accepted value as string
+     * @param spacing
+     *            A CSS accepted value as string
      */
     public void setColSpacing(String spacing) {
         getStyle().set("--vaadin-form-layout-column-spacing", spacing);
-    }    
+    }
 
     /**
-     * This is a convenience API to set the subsequently created
-     * form items to have label texts right aligned.  
+     * This is a convenience API to set the subsequently created form items to
+     * have label texts right aligned.
      * 
-     * @param rightAligned A boolean value
+     * @param rightAligned
+     *            A boolean value
      */
     public void setLabelsRightAligned(boolean rightAligned) {
         labelsRightAligned = rightAligned;
     }
 
+    /**
+     * Normally required indicator disappears after user gives a value. You can
+     * change this by setting stickyIndicator = true.
+     * 
+     * @param stickyIndicator
+     *            A boolean value
+     */
+    public void setStickyIndicator(boolean stickyIndicator) {
+        this.stickyIndicator = stickyIndicator;
+    }
+    
     public class EnhancedFormItem extends FormItem {
 
         Registration listenerReg;
@@ -139,7 +156,7 @@ public class EnhancedFormLayout extends FormLayout {
          */
         public EnhancedFormItem(Component comp, Component label) {
             if (label instanceof HasText) {
-                this.label = (HasText) label;                
+                this.label = (HasText) label;
             }
             add(comp);
             getElement().getStyle().set("--required-dot-opacity", "0");
@@ -147,7 +164,7 @@ public class EnhancedFormLayout extends FormLayout {
             if (comp instanceof HasValue) {
                 HasValue field = (HasValue) comp;
                 field.addValueChangeListener(event -> {
-                    if (event.getValue() != null) {
+                    if (!stickyIndicator && event.getValue() != null) {
                         getElement().getStyle().set("--required-dot-opacity",
                                 "0");
                     }
@@ -163,30 +180,35 @@ public class EnhancedFormLayout extends FormLayout {
                                     .set("--required-dot-opacity", "0");
                         }
                     });
-            if (formItemLabelWidth != null) setLabelWidth(formItemLabelWidth);
-            if (formItemRowSpacing != null) setRowSpacing(formItemRowSpacing);
-            if (labelsRightAligned) setRightAligned(true);
+            if (formItemLabelWidth != null)
+                setLabelWidth(formItemLabelWidth);
+            if (formItemRowSpacing != null)
+                setRowSpacing(formItemRowSpacing);
+            if (labelsRightAligned)
+                setRightAligned(true);
         }
 
         /**
          * Sets the label text if label component is instance of HasText.
          * 
-         * @param text Label text as String
+         * @param text
+         *            Label text as String
          */
         public void setLabel(String text) {
             if (label != null) {
                 label.setText(text);
             }
         }
-        
+
         /**
          * Sets the new label component
          * 
-         * @param label Component
+         * @param label
+         *            Component
          */
         public void setLabel(Component label) {
             if (label instanceof HasText) {
-                this.label = (HasText) label;                
+                this.label = (HasText) label;
             }
             clearLabel();
             addToLabel(label);
@@ -194,29 +216,30 @@ public class EnhancedFormLayout extends FormLayout {
 
         private void clearLabel() {
             getElement().getChildren()
-                .filter(child -> "label".equals(child.getAttribute("slot")))
-                .collect(Collectors.toList())
-                .forEach(getElement()::removeChild);
+                    .filter(child -> "label".equals(child.getAttribute("slot")))
+                    .collect(Collectors.toList())
+                    .forEach(getElement()::removeChild);
         }
 
         /**
-         * This is a convenience API to set the width value of this
-         * form item.
+         * This is a convenience API to set the width value of this form item.
          * 
-         * @param width A CSS accepted width as string
-         * @return EnhancedFormItem for chaining 
+         * @param width
+         *            A CSS accepted width as string
+         * @return EnhancedFormItem for chaining
          */
         public EnhancedFormItem setLabelWidth(String width) {
             getStyle().set("--vaadin-form-item-label-width", width);
             return this;
         }
-        
+
         /**
-         * This is a convenience API to set the row spacing
-         * value of this form item.
+         * This is a convenience API to set the row spacing value of this form
+         * item.
          * 
-         * @param spacing A CSS accepted value as string
-         * @return EnhancedFormItem for chaining 
+         * @param spacing
+         *            A CSS accepted value as string
+         * @return EnhancedFormItem for chaining
          */
         public EnhancedFormItem setRowSpacing(String spacing) {
             getStyle().set("--vaadin-form-item-row-spacing", spacing);
@@ -224,11 +247,12 @@ public class EnhancedFormLayout extends FormLayout {
         }
 
         /**
-         * This is a convenience API to set the 
-         * form item to have label texts right aligned.  
+         * This is a convenience API to set the form item to have label texts
+         * right aligned.
          * 
-         * @param rightAligned A boolean value
-         * @return EnhancedFormItem for chaining 
+         * @param rightAligned
+         *            A boolean value
+         * @return EnhancedFormItem for chaining
          */
         public EnhancedFormItem setRightAligned(boolean rightAligned) {
             if (rightAligned) {
@@ -240,18 +264,19 @@ public class EnhancedFormLayout extends FormLayout {
         }
 
         /**
-         * This is a convenience API to set the 
-         * form item to be aligned at bottom (true) instead of top.  
+         * This is a convenience API to set the form item to be aligned at
+         * bottom (true) instead of top.
          * 
-         * @param bottomAligned A boolean value
-         * @return EnhancedFormItem for chaining 
+         * @param bottomAligned
+         *            A boolean value
+         * @return EnhancedFormItem for chaining
          */
         public EnhancedFormItem setBottomAligned(boolean bottomAligned) {
             if (bottomAligned) {
-                getElement().getStyle().set("align-self","flex-end");
+                getElement().getStyle().set("align-self", "flex-end");
             } else {
-                getElement().getStyle().set("align-self","flex-start");
-            }            
+                getElement().getStyle().set("align-self", "flex-start");
+            }
             return this;
         }
     }
