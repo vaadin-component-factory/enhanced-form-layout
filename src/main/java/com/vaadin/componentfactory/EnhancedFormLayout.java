@@ -163,6 +163,9 @@ public class EnhancedFormLayout extends FormLayout {
             addToLabel(label);
             if (comp instanceof HasValue) {
                 HasValue field = (HasValue) comp;
+                if (field.isRequiredIndicatorVisible()) {
+                    getElement().getStyle().set("--required-dot-opacity", "1");                    
+                }
                 field.addValueChangeListener(event -> {
                     if (!stickyIndicator && event.getValue() != null) {
                         getElement().getStyle().set("--required-dot-opacity",
