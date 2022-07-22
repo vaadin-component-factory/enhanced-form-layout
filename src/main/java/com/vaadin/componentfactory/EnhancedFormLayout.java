@@ -4,26 +4,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.formlayout.FormLayout.FormItem;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.shared.Registration;
 
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
-import elemental.json.JsonValue;
 
 @CssImport(value = "./styles/enhanced-form-item.css", themeFor = "vaadin-form-item")
+@CssImport(value = "./styles/enhanced-form-layout.css", themeFor = "vaadin-form-layout")
 public class EnhancedFormLayout extends FormLayout {
+
+    public enum FormLayoutOrientation {
+        HORIZONTAL, VERTICAL;
+    }
 
     private static final String MIN_WIDTH_JSON_KEY = "minWidth";
     private static final String COLUMNS_JSON_KEY = "columns";
@@ -139,7 +140,26 @@ public class EnhancedFormLayout extends FormLayout {
     public void setStickyIndicator(boolean stickyIndicator) {
         this.stickyIndicator = stickyIndicator;
     }
-    
+
+    /**
+     * Set orientation of the component flowing in the layout. The default is
+     * FormLayoutOrientation.HORIZONTAL, where components added are filled by
+     * rows. In FormLayoutOrientation.VERTICAL mode components are filled by
+     * column.
+     * <p>
+     * Note: In Vertical mode you need to set definitive height to layout in
+     * order to wrap items to multiple columns.
+     * 
+     * @param orientation
+     */
+    public void setOrientation(FormLayoutOrientation orientation) {
+        if (orientation == FormLayoutOrientation.VERTICAL) {
+            getElement().getThemeList().add("vertical");
+        } else {
+            getElement().getThemeList().remove("vertical");
+        }
+    }
+
     public class EnhancedFormItem extends FormItem {
 
         Registration listenerReg;
@@ -164,7 +184,7 @@ public class EnhancedFormLayout extends FormLayout {
             if (comp instanceof HasValue) {
                 HasValue field = (HasValue) comp;
                 if (field.isRequiredIndicatorVisible()) {
-                    getElement().getStyle().set("--required-dot-opacity", "1");                    
+                    getElement().getStyle().set("--required-dot-opacity", "1");
                 }
                 field.addValueChangeListener(event -> {
                     if (!stickyIndicator && event.getValue() != null) {

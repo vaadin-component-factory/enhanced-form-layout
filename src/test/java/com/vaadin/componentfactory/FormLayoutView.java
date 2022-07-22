@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.vaadin.componentfactory.EnhancedFormLayout.EnhancedFormItem;
+import com.vaadin.componentfactory.EnhancedFormLayout.FormLayoutOrientation;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
@@ -200,6 +201,7 @@ public class FormLayoutView extends VerticalLayout {
         // source-example-heading: Handling columns and colspans in a layout
         EnhancedFormLayout columnLayout = new EnhancedFormLayout();
         columnLayout.setColSpacing("5em");
+        
         // Setting the desired responsive steps for the columns in the layout
         columnLayout.setResponsiveSteps(new ResponsiveStep("25em", 1),
                 new ResponsiveStep("32em", 2), new ResponsiveStep("40em", 3));
@@ -264,9 +266,18 @@ public class FormLayoutView extends VerticalLayout {
         layoutWithBinder.setLabelsRightAligned(true);
         layoutWithBinder.setStickyIndicator(true);
         layoutWithBinder.addFormItem(firstName, "First name");
-        layoutWithBinder.addFormItem(lastName, "Last name");
+        layoutWithBinder.addFormItem( lastName, "Last name");
         layoutWithBinder.addFormItem(birthDate, "Birthdate");
         layoutWithBinder.addFormItem(email, "E-mail");
+
+        
+        layoutWithBinder.setOrientation(FormLayoutOrientation.VERTICAL);
+        layoutWithBinder.setHeight("150px");
+        
+        // Setting the desired responsive steps for the columns in the layout
+        layoutWithBinder.setResponsiveSteps(new ResponsiveStep("25em", 1),
+                new ResponsiveStep("32em", 2), new ResponsiveStep("40em", 3));
+
         EnhancedFormItem phoneItem = layoutWithBinder.addFormItem(phone, "Fone");
         phoneItem.setLabel(new Label("Phone"));
         phoneItem.add(doNotCall);
@@ -347,7 +358,7 @@ public class FormLayoutView extends VerticalLayout {
 
         dumpResponsiveSteps(layoutWithBinder);
 
-        add(new H2("A form layout with fields using Binder"), layoutWithBinder,
+        add(new H2("A form layout with fields using Binder (Vertical)"), layoutWithBinder,
                 actions, infoLabel);
 
     }
